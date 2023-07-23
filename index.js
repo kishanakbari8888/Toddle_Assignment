@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const {connection} = require('./dataBaseconnection');
 const journalCreate = require('./routes/journalCreate');
 const journalUpdate = require('./routes/journalUpdate');
-const journaldelete = require('./routes/journaldelete');
+const journaldelete = require('./routes/journalDelete');
 const feedRoute = require('./feedRoute/feedRoute');
 
 require("dotenv").config()
