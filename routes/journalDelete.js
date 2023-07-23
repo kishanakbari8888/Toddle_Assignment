@@ -6,13 +6,16 @@ const { v4: uuidv4 } = require('uuid');
 const getCurrentDateTime = require('../extrafunction/dateTostandaedformate');
 const teacherAuthorization = require('../authorization/authorization');
 const { upload } = require('../extrafunction/uploadFile');
+const fs = require('fs');
+const path = require('path');
+
 
 router.delete('/journal',teacherAuthorization,async (req,res)=>{
     const {postid} = req.body;
 
     await connection.query(`SELECT * FROM post WHERE postid = "${postid}" AND teacherid = "${req.user.name}"`,async (err,result)=>{
         if(err){
-            console.log(err);
+            // console.log(err);
             return res.status(500).send('Server error');
         }
         if(result.length == 0){
@@ -22,7 +25,7 @@ router.delete('/journal',teacherAuthorization,async (req,res)=>{
 
         await connection.query(`DELETE FROM post WHERE postid = "${postid}"`,async (err,result)=>{
             if(err){
-                console.log(err);
+                // console.log(err);
                 return res.status(500).send('Server error');
             }
             return res.status(200).send('Journal deleted');
@@ -38,7 +41,7 @@ router.delete('/journal',teacherAuthorization,async (req,res)=>{
 router.delete('/removestudent',teacherAuthorization,async (req,res)=>{
         
         const {postid,studentids} = req.body;
-        console.log(postid,studentids);
+        // console.log(postid,studentids);
         
         let error = {succfulydelect:[],notfound:[]};
         const allpromise = [];
@@ -90,12 +93,45 @@ router.delete('/removestudent',teacherAuthorization,async (req,res)=>{
 
         }
         catch(err){
-            console.log(err);
+            // console.log(err);
             return res.status(500).send('Server error');
         }
 
 });
 
+
+// just for testing
+
+router.delete('/deleteallfile',async (req,res)=>{
+    if(req.body.password != "16555")
+        return res.status(400).send('Wrong password');
+    
+    const folderPath = __dirname + '/../uploads'; // Replace this with the actual path to your folder
+    console.log("------------");
+    fs.readdir(folderPath, (err, files) => {
+        if (err) {
+            console.error('Error reading folder:', err);
+            return;
+        }
+
+        // Loop through the files in the folder and delete each one
+        files.forEach((file) => {
+            const filePath = path.join(folderPath, file);
+            
+            // Use fs.unlink to delete the file
+            fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error('Error deleting file:', err);
+                return;
+            }
+
+            console.log('File deleted:', filePath);
+            });
+        });
+    });
+    
+    return res.status(200).send('all file deleted');
+});
 
 
 

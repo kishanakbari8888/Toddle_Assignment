@@ -10,7 +10,7 @@ const { upload } = require('../extrafunction/uploadFile');
 router.put('/description',teacherAuthorization,async (req,res)=>{
     const {postid,description} = req.body;
 
-    console.log(postid,description);
+    // console.log(postid,description);
     await connection.query(`UPDATE post SET description = "${description}" WHERE postid = "${postid}"`,async (err,result)=>{
         if(err){
             console.log(err);
@@ -24,7 +24,7 @@ router.put('/description',teacherAuthorization,async (req,res)=>{
 router.put('/addstudent',teacherAuthorization,async (req,res)=>{
     
     const {postid,studentids} = req.body;
-    console.log(postid,studentids);
+    // console.log(postid,studentids);
     
     let error = {succfulyadded:[],alreadyindb:[],notfound:[]};
     const allpromise = [];
@@ -66,7 +66,7 @@ router.put('/addstudent',teacherAuthorization,async (req,res)=>{
     
     try{
         await Promise.all(allpromise).then((data)=>{
-            console.log(data);
+            // console.log(data);
             data.forEach((element)=>{
                 if(element[0] == 1){
                     error.succfulyadded.push(element[1]);
@@ -84,7 +84,7 @@ router.put('/addstudent',teacherAuthorization,async (req,res)=>{
         return res.status(500).send({error:"server error or some student already added"});
     }
 
-    console.log(error);
+    // console.log(error);
 
     return res.status(200).json(error);
     

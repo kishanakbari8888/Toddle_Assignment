@@ -49,7 +49,7 @@ const student_teacherAuthorization = async (req,res,next)=>{
 
                 await connection.query(`SELECT * FROM student WHERE userid = "${verified.name}"` ,async (err,result)=>{
                     if(err){
-                        console.log(err);
+                        // console.log(err);
                         return res.status(500).send('Server error');
                     }
                     if(result.length == 0){
@@ -61,7 +61,7 @@ const student_teacherAuthorization = async (req,res,next)=>{
             else{
                 await connection.query(`SELECT * FROM teacher WHERE userid = "${verified.name}"` ,async (err,result)=>{
                     if(err){
-                        console.log(err);
+                        // console.log(err);
                         return res.status(500).send('Server error');
                     }
                     if(result.length == 0){

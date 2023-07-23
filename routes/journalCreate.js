@@ -12,29 +12,77 @@ router.post('/createjournal',teacherAuthorization ,async (req,res)=>{
 
     const {name} = req.user;
     
-    let {description,scheduleTime} =  req.body;
+    let {description,studentids,published_at} =  req.body;
 
-    if(scheduleTime == undefined){
-        scheduleTime = getCurrentDateTime();
+    
+    if(published_at == undefined){
+        published_at = getCurrentDateTime();
     }
     if(description == undefined){
         description = null;
     }
-        
+    if(studentids == undefined){
+        studentids = [];
+    }        
     const randomUUID = uuidv4();
-    console.log(randomUUID);
+    // console.log(randomUUID);
 
-    await connection.query(`INSERT INTO post(postid,teacherid,description,filename,time) VALUES ("${randomUUID}","${name}","${description}","${null}","${scheduleTime}")`,async (err,result)=>{
+    await connection.query(`INSERT INTO post(postid,teacherid,description,filename,time) VALUES ("${randomUUID}","${name}","${description}","${null}","${published_at}")`,async (err,result)=>{
         if(err){
-            console.log(err);
             return res.status(500).send('Server error');
         }
-
     });
 
-    return res.status(200).json({postid:randomUUID,description,time:scheduleTime});
+    
+    let error = {succfulyadded:[],notfound:[]};
+    const allpromise = [];
+
+    studentids.forEach(async (element) => {
+
+        let promise = new Promise(async (resolve,reject)=>{
+            await connection.query(`SELECT * FROM student WHERE userid = "${element}"`,async (err,result)=>{
+                if(err){
+                    return reject(err);
+                }
+                if(result.length == 0){
+                    return resolve([0,element]);
+                }
+
+                await connection.query(`INSERT INTO tag(postid,studentid) VALUES ("${randomUUID}","${element}")`,async (err,result)=>{
+                    if(err){
+                        return reject(err);
+                    }
+                    return resolve([1,element]);
+                });
+            });
+        });
+
+        allpromise.push(promise);
+    });
+    
+    try{
+        await Promise.all(allpromise).then((data)=>{
+            
+            data.forEach((element)=>{
+                if(element[0] == 1){
+                    error.succfulyadded.push(element[1]);
+                }
+                else{
+                    error.notfound.push(element[1]);
+                }
+            });
+        });
+    }
+    catch(err){
+        return res.status(500).send({error:"server error or some student already added"});
+    }
+
+
+    return res.status(200).json({postid:randomUUID,description,error,time:published_at});
 
 });
+
+
 
 
 router.post('/addfile',teacherAuthorization,(req,res)=>{
@@ -51,7 +99,7 @@ router.post('/addfile',teacherAuthorization,(req,res)=>{
 router.post('/addstudent',teacherAuthorization,async (req,res)=>{
     
     const {postid,studentids} = req.body;
-    console.log(postid,studentids);
+    // console.log(postid,studentids);
     
     let error = {succfulyadded:[],notfound:[]};
     const allpromise = [];
@@ -81,7 +129,7 @@ router.post('/addstudent',teacherAuthorization,async (req,res)=>{
     
     try{
         await Promise.all(allpromise).then((data)=>{
-            console.log(data);
+            // console.log(data);
             data.forEach((element)=>{
                 if(element[0] == 1){
                     error.succfulyadded.push(element[1]);
@@ -96,7 +144,7 @@ router.post('/addstudent',teacherAuthorization,async (req,res)=>{
         return res.status(500).send({error:"server error or some student already added"});
     }
 
-    console.log(error);
+    // console.log(error);
 
     return res.status(200).json(error);
     

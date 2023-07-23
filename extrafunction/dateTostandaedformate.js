@@ -17,7 +17,7 @@ function getCurrentDateTime() {
     const seconds = String(now.getSeconds()).padStart(2, '0');
   
     // Combine the date and time components to form the desired format
-    const dateTimeString = `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
+    const dateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   
     return dateTimeString;
 }

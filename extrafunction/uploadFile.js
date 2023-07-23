@@ -9,9 +9,9 @@ const storage = multer.diskStorage({
     filename:async function(req,file,cb){
         let postid = file.fieldname;
 
-        await connection.query(`select * from post where postid = "${postid}"`,(err,result)=>{
+        await connection.query(`select * from post where postid = "${postid}"`,async (err,result)=>{
             if(err){
-                console.log(err);
+                // console.log(err);
                 return cb(new Error('postid not found'));
             }
 
@@ -19,8 +19,16 @@ const storage = multer.diskStorage({
                 return cb({error:"postid not found"},null);
             }
 
-            let fileExtension = path.extname(file.originalname);
-            return cb(null,postid + fileExtension);
+            //change file name to postid in sql db
+            await connection.query(`UPDATE post SET filename = "${postid}" WHERE postid = "${postid}"`,(err,result)=>{
+                if(err){
+                    return cb(new Error('postid not found'));
+                }
+
+                let fileExtension = path.extname(file.originalname);
+                return cb(null,postid + fileExtension);
+            });
+
         });
 
     }
