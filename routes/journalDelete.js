@@ -100,37 +100,29 @@ router.delete('/removestudent',teacherAuthorization,async (req,res)=>{
 });
 
 
-// just for testing
 
-router.delete('/deleteallfile',async (req,res)=>{
-    if(req.body.password != "16555")
-        return res.status(400).send('Wrong password');
-    
-    const folderPath = __dirname + '/../uploads'; // Replace this with the actual path to your folder
-    console.log("------------");
-    fs.readdir(folderPath, (err, files) => {
-        if (err) {
-            console.error('Error reading folder:', err);
-            return;
+
+router.delete('/deleteallfile',teacherAuthorization,async (req,res)=>{
+   
+    const filePath = __dirname + '/../uploads' + req.body.filename; 
+
+    //set null in database
+    await connection.query(`UPDATE post SET filename = NULL WHERE postid = "${req.body.postid}"`,async (err,result)=>{
+        if(err){
+            return res.status(500).send('Server error');
         }
-
-        // Loop through the files in the folder and delete each one
-        files.forEach((file) => {
-            const filePath = path.join(folderPath, file);
-            
-            // Use fs.unlink to delete the file
-            fs.unlink(filePath, (err) => {
+        
+        fs.unlink(filePath, (err) => {
             if (err) {
                 console.error('Error deleting file:', err);
-                return;
+                return res.status(500).send('Server error');
+                
             }
-
-            console.log('File deleted:', filePath);
-            });
+            return res.status(200).send('File Deleted');
         });
+
     });
     
-    return res.status(200).send('all file deleted');
 });
 
 

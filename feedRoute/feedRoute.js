@@ -84,6 +84,68 @@ router.post('/getjournal',student_teacherAuthorization,async (req,res)=>{
     let post = [];
     if(req.user.userType == 'teacher'){
         
+        const studentids = req.body.studentids;
+
+        await connection.query(`SELECT * FROM post WHERE teacherid = "${name}"`,async (err,result)=>{
+            if(err){
+                // console.log(err);
+                return res.status(500).send('Server error');
+            }
+            post = await getallpost(result,1);
+
+            //filter all post by studentids
+            if(studentids != undefined){
+                post = post.filter((element)=>{
+                    let flag = 0;
+                    element.student.forEach((element1)=>{
+                        if(studentids.includes(element1)){
+                            flag = 1;
+                        }
+                    });
+                    if(flag == 1){
+                        return element;
+                    }
+                });
+            }
+
+            return res.status(200).send(post);
+        });
+    }
+    else{
+
+        let post = [];
+        const teacherids = req.body.teacherids;
+        
+        await connection.query(`SELECT * FROM tag WHERE studentid = "${name}"`,async (err,result)=>{
+            if(err){
+                // console.log(err);
+                return res.status(500).send('Server error');
+            }
+
+            post = await getallpost(result);
+
+            //filter all post by teacherids
+            if(teacherids != undefined){
+                post = post.filter((element)=>{
+                    if(teacherids.includes(element.teacherid)){
+                        return element;
+                    }
+                });
+            }
+        
+            return res.status(200).send(post);
+        });
+
+    }
+});
+
+
+router.post('/journalfilter',student_teacherAuthorization,async (req,res)=>{
+
+    const {name} = req.user;
+    let post = [];
+    if(req.user.userType == 'teacher'){
+        
         await connection.query(`SELECT * FROM post WHERE teacherid = "${name}"`,async (err,result)=>{
             if(err){
                 // console.log(err);
@@ -109,6 +171,9 @@ router.post('/getjournal',student_teacherAuthorization,async (req,res)=>{
         });
 
     }
+
+
+
 });
 
 

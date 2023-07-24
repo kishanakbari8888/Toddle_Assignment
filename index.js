@@ -14,10 +14,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
+
+
+
 app.use('/api/user', authRoute);
-
-
-
 
 app.use('/api/journal', journalCreate);
 app.use('/api/journal/update', journalUpdate);
