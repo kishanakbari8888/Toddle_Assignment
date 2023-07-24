@@ -30,7 +30,7 @@ router.post('/registration',async (req,res)=>{
                 }
                 const token = jwt.sign({name:name,userType:userType},process.env.JWT_SECRET, { expiresIn: tokentime });
                 
-                return res.cookie('Jwt',token).send(token);
+                return res.cookie('Jwt',token).send({stutas:"successfully register ",token});
             
             });
 
@@ -56,7 +56,7 @@ router.post('/registration',async (req,res)=>{
                 // console.log(1);
                 const token = await jwt.sign({name:name,userType:userType},process.env.JWT_SECRET, { expiresIn: tokentime });
                 // console.log(2);
-                return res.cookie('Jwt',token).send(token);
+                return res.cookie('Jwt',token).send({stutas:"successfully register ",token});
             
             });
 
@@ -90,7 +90,7 @@ router.post('/login',async (req,res)=>{
                 return res.status(400).send('Invalid password');
             }
             const token = jwt.sign({name:name,userType:userType},process.env.JWT_SECRET, { expiresIn: tokentime });
-            return res.cookie('Jwt',token).send(token);
+            return res.cookie('Jwt',token).send({stutas:"successfully register ",token});
         });
           
 
@@ -111,7 +111,7 @@ router.post('/login',async (req,res)=>{
             }
             
             const token = jwt.sign({name:name,userType:userType},process.env.JWT_SECRET, { expiresIn: tokentime });
-            return res.cookie('Jwt',token).send(token);
+            return res.cookie('Jwt',token).send({stutas:"successfully register ",token});
         });
     }
     else{

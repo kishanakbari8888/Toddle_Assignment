@@ -106,30 +106,16 @@ router.put('/addstudent',teacherAuthorization,async (req,res)=>{
 
 
 
-router.post('/updatefile',teacherAuthorization,(req,res)=>{
+router.put('/updatefile',teacherAuthorization,(req,res)=>{
 
-    // check postid and user is valid or not
-    const {postid} = req.body;
-    connection.query(`SELECT * FROM post WHERE postid = "${postid}" AND teacherid = "${req.user.name}"`,async (err,result)=>{
+    upload.any()(req,res,(err)=>{
         if(err){
-            return res.status(500).send('Server error');
+            return res.status(500).send(err);
         }
-        if(result.length == 0){
-            return res.status(400).send('You dont have this post');
-
-        }
-        
-        upload.any()(req,res,(err)=>{
-            if(err){
-                return res.status(500).send(err);
-            }
-        
-            return res.status(200).send({filestatus:"file uploaded"});
-        })
-    });
-
+    
+        return res.status(200).send({filestatus:"file uploaded"});
+    })
 });
-
 
 
 

@@ -104,7 +104,7 @@ router.delete('/removestudent',teacherAuthorization,async (req,res)=>{
 
 router.delete('/deleteallfile',teacherAuthorization,async (req,res)=>{
    
-    const filePath = __dirname + '/../uploads' + req.body.filename; 
+    const filePath = __dirname + '/../uploads/' + req.body.postid + '.pdf'; 
 
     //set null in database
     await connection.query(`UPDATE post SET filename = NULL WHERE postid = "${req.body.postid}"`,async (err,result)=>{
