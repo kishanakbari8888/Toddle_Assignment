@@ -81,7 +81,7 @@ router.post('/login',async (req,res)=>{
                 return res.status(400).send('Invalid password');
             }
             const token = jwt.sign({name:name,userType:userType},process.env.JWT_SECRET, { expiresIn: tokentime });
-            return res.cookie('Jwt',token).send({stutas:"successfully register ",token});
+            return res.cookie('Jwt',token).send({stutas:"successfully login ",token});
         });
           
 
@@ -101,7 +101,7 @@ router.post('/login',async (req,res)=>{
             }
             
             const token = jwt.sign({name:name,userType:userType},process.env.JWT_SECRET, { expiresIn: tokentime });
-            return res.cookie('Jwt',token).send({stutas:"successfully register ",token});
+            return res.cookie('Jwt',token).send({stutas:"successfully login ",token});
         });
     }
     else{
