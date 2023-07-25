@@ -36,7 +36,6 @@ function getallpost(result,teacher=0){
                         reject(err);
                     }
 
-                    // console.log(typeof(result[0].time));
                     // result[0].time conver into date standard formate
 
                     const time = result[0].time;
@@ -60,7 +59,6 @@ function getallpost(result,teacher=0){
                             return element.studentid;
                         });
                         temp.student = result1;
-                        // console.log(temp);
                         post.push(temp);
                         return resolve(0);
                     });
@@ -88,7 +86,6 @@ router.post('/getjournal',student_teacherAuthorization,async (req,res)=>{
 
         await connection.query(`SELECT * FROM post WHERE teacherid = "${name}"`,async (err,result)=>{
             if(err){
-                // console.log(err);
                 return res.status(500).send('Server error');
             }
             post = await getallpost(result,1);
@@ -118,7 +115,6 @@ router.post('/getjournal',student_teacherAuthorization,async (req,res)=>{
         
         await connection.query(`SELECT * FROM tag WHERE studentid = "${name}"`,async (err,result)=>{
             if(err){
-                // console.log(err);
                 return res.status(500).send('Server error');
             }
 
@@ -148,7 +144,6 @@ router.post('/journalfilter',student_teacherAuthorization,async (req,res)=>{
         
         await connection.query(`SELECT * FROM post WHERE teacherid = "${name}"`,async (err,result)=>{
             if(err){
-                // console.log(err);
                 return res.status(500).send('Server error');
             }
             post = await getallpost(result,1);
@@ -161,7 +156,6 @@ router.post('/journalfilter',student_teacherAuthorization,async (req,res)=>{
         
         await connection.query(`SELECT * FROM tag WHERE studentid = "${name}"`,async (err,result)=>{
             if(err){
-                // console.log(err);
                 return res.status(500).send('Server error');
             }
 

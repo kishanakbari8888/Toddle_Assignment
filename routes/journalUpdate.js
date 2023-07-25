@@ -19,7 +19,6 @@ router.put('/description',teacherAuthorization,async (req,res)=>{
         
         await connection.query(`UPDATE post SET description = "${description}" WHERE postid = "${postid}"`,async (err,result)=>{
             if(err){
-                console.log(err);
                 return res.status(500).send('Server error');
             }
             return res.status(200).send('description updated');
@@ -81,7 +80,6 @@ router.put('/addstudent',teacherAuthorization,async (req,res)=>{
         
         try{
             await Promise.all(allpromise).then((data)=>{
-                // console.log(data);
                 data.forEach((element)=>{
                     if(element[0] == 1){
                         error.succfulyadded.push(element[1]);
@@ -116,11 +114,6 @@ router.put('/updatefile',teacherAuthorization,(req,res)=>{
         return res.status(200).send({filestatus:"file uploaded"});
     })
 });
-
-
-
-
-
 
 
 

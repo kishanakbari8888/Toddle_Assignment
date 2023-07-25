@@ -15,7 +15,6 @@ router.delete('/journal',teacherAuthorization,async (req,res)=>{
 
     await connection.query(`SELECT * FROM post WHERE postid = "${postid}" AND teacherid = "${req.user.name}"`,async (err,result)=>{
         if(err){
-            // console.log(err);
             return res.status(500).send('Server error');
         }
         if(result.length == 0){
@@ -25,7 +24,6 @@ router.delete('/journal',teacherAuthorization,async (req,res)=>{
 
         await connection.query(`DELETE FROM post WHERE postid = "${postid}"`,async (err,result)=>{
             if(err){
-                // console.log(err);
                 return res.status(500).send('Server error');
             }
             return res.status(200).send('Journal deleted');
@@ -41,7 +39,6 @@ router.delete('/journal',teacherAuthorization,async (req,res)=>{
 router.delete('/removestudent',teacherAuthorization,async (req,res)=>{
         
         const {postid,studentids} = req.body;
-        // console.log(postid,studentids);
         
         let error = {succfulydelect:[],notfound:[]};
         const allpromise = [];
@@ -93,7 +90,6 @@ router.delete('/removestudent',teacherAuthorization,async (req,res)=>{
 
         }
         catch(err){
-            // console.log(err);
             return res.status(500).send('Server error');
         }
 
@@ -106,7 +102,6 @@ router.delete('/deleteallfile',teacherAuthorization,async (req,res)=>{
    
     const filePath = __dirname + '/../uploads/' + req.body.postid + '.pdf'; 
 
-    //set null in database
     await connection.query(`UPDATE post SET filename = NULL WHERE postid = "${req.body.postid}"`,async (err,result)=>{
         if(err){
             return res.status(500).send('Server error');
@@ -114,7 +109,6 @@ router.delete('/deleteallfile',teacherAuthorization,async (req,res)=>{
         
         fs.unlink(filePath, (err) => {
             if (err) {
-                console.error('Error deleting file:', err);
                 return res.status(500).send('Server error');
                 
             }
@@ -126,6 +120,33 @@ router.delete('/deleteallfile',teacherAuthorization,async (req,res)=>{
 });
 
 
+// testing purpose
+router.delete('/deletefile',async (req,res)=>{
 
+    let filename = {deletefile:[]};
+    const folderPath = '__dirname' + '/../uploads'; 
+    fs.readdir(folderPath, (err, files) => {
+        if (err) {
+          return;
+        }
+      
+        files.forEach((file) => {
+          const filePath = path.join(folderPath, file);
+      
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    return;
+                }
+                
+                filename.deletefile.push(file);
+            });
+        });
+    });
+    
+    setTimeout(()=>{
+        return res.json(filename);
+    },5000);
+
+});
 
 module.exports = router;

@@ -11,7 +11,6 @@ const storage = multer.diskStorage({
 
         await connection.query(`select * from post where postid = "${postid}"`,async (err,result)=>{
             if(err){
-                // console.log(err);
                 return cb(new Error('postid not found'));
             }
 

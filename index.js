@@ -18,21 +18,17 @@ app.use(cookieParser());
 
 
 app.use('/api/user', authRoute);
-
 app.use('/api/journal', journalCreate);
 app.use('/api/journal/update', journalUpdate);
 app.use('/api/journal/delete', journaldelete);
-
 app.use('/api/feed', feedRoute);
-
 app.use('', initRoute);
 
 
 app.listen(PORT,async ()=>{  
-    
     console.log(`here we go ${PORT}`);
-
 });
 
 
-// https://toddle-assignment.onrender.com/api/user/registration
+
+// https://toddle-assignment.onrender.com

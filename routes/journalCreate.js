@@ -25,7 +25,6 @@ router.post('/createjournal',teacherAuthorization ,async (req,res)=>{
         studentids = [];
     }        
     const randomUUID = uuidv4();
-    // console.log(randomUUID);
 
     await connection.query(`INSERT INTO post(postid,teacherid,description,filename,time) VALUES ("${randomUUID}","${name}","${description}","${null}","${published_at}")`,async (err,result)=>{
         if(err){
@@ -99,7 +98,6 @@ router.post('/addfile',teacherAuthorization,(req,res)=>{
 router.post('/addstudent',teacherAuthorization,async (req,res)=>{
     
     const {postid,studentids} = req.body;
-    // console.log(postid,studentids);
     
     let error = {succfulyadded:[],notfound:[]};
     const allpromise = [];
@@ -129,7 +127,6 @@ router.post('/addstudent',teacherAuthorization,async (req,res)=>{
     
     try{
         await Promise.all(allpromise).then((data)=>{
-            // console.log(data);
             data.forEach((element)=>{
                 if(element[0] == 1){
                     error.succfulyadded.push(element[1]);
@@ -144,7 +141,6 @@ router.post('/addstudent',teacherAuthorization,async (req,res)=>{
         return res.status(500).send({error:"server error or some student already added"});
     }
 
-    // console.log(error);
 
     return res.status(200).json(error);
     
