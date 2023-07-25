@@ -37,7 +37,9 @@ function getallpost(result,teacher=0){
                     }
 
                     // result[0].time conver into date standard formate
-
+                    if(result.length == 0){
+                        return resolve(0);
+                    }
                     const time = result[0].time;
                     
                     if(standardformate(time) > getCurrentDateTime() && teacher!=1){
