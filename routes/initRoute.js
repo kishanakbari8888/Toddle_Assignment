@@ -22,14 +22,14 @@ router.get('/',(req,res)=>{
                 methodType: 'put',
                 uploaddescription: '/api/journal/update/description',
                 addstudent: '/api/journal/update/addstudent',
-                updateFile: 'api/journal/update/updatefile'
+                updateFile: '/api/journal/update/updatefile'
             },
             removejournal : {
                 // delete request
                 methodType: 'delete',
-                deletejournal : 'api/journal/delete/journal',
-                removestudent: 'api/journal/delete/removestudent',
-                deletefile:'api/journal/delete/deleteallfile'
+                deletejournal : '/api/journal/delete/journal',
+                removestudent: '/api/journal/delete/removestudent',
+                deletefile:'/api/journal/delete/deleteallfile'
 
             },
             Feed: {
