@@ -6,6 +6,9 @@
 ## Table of Content
 
 - [Introduction](#introduction)
+- [APIEndpoints](#APIEndpoints)
+- [DatabaseSchema](#DatabaseSchema)
+- [NotificationDesign](#NotificationDesign)
 
 
 ## Introdution
