@@ -8,6 +8,7 @@ const journalCreate = require('./routes/journalCreate');
 const journalUpdate = require('./routes/journalUpdate');
 const journaldelete = require('./routes/journalDelete');
 const feedRoute = require('./feedRoute/feedRoute');
+const fs = require('fs');
 
 require("dotenv").config()
 const app = express();
@@ -30,5 +31,20 @@ app.listen(PORT,async ()=>{
 });
 
 
+const folderName = 'uploads';
+
+if (fs.existsSync(folderName)) {
+    // console.log(`Folder "${folderName}" already exists.`);
+} else {
+    fs.mkdir(folderName, (err) => {
+        if (err) {
+          console.error('Error creating folder:', err);
+        } else {
+          console.log(`Folder "${folderName}" created successfully.`);
+        }
+    });
+    
+}
+  
 
 // https://toddle-assignment.onrender.com
